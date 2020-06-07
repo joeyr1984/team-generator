@@ -15,10 +15,10 @@ var engineeringTeam = [];
 // and to create objects for each team member (using the correct classes as blueprints!)
 const rolePrompt = [
     {
-        type: "list",
+        type: "rawlist",
         name: "employee",
         message: "Please select an employee role to add.",
-        choices: ["Manager", "Engineer", "Intern"]
+        choices: ["Engineer", "Intern", "no more to add"]
     }
 ];
 const engineerPrompt = [
@@ -29,10 +29,10 @@ const engineerPrompt = [
         default: "Bill Nye"
     },
     {
-        type: "input",
+        type: "number",
         name: "engineerId",
         message: "Please enter Engineers ID.",
-        default: "2"
+        default: 2
     },
     {
         type: "input",
@@ -47,7 +47,7 @@ const engineerPrompt = [
         default: "BillNye1984"
     }
 ];
-const internPrompt  = [
+const internPrompt = [
     {
         type: "input",
         name: "internName",
@@ -55,10 +55,10 @@ const internPrompt  = [
         default: "Bill Nye"
     },
     {
-        type: "input",
+        type: "number",
         name: "internId",
         message: "Please enter the Intern's ID.",
-        default: "2"
+        default: 2
     },
     {
         type: "input",
@@ -73,18 +73,18 @@ const internPrompt  = [
         default: "Cooley High"
     }
 ];
-const managerPrompt  = [
+const managerPrompt = [
     {
         type: "input",
         name: "managerName",
-        message: "Please enter the Manager's Name.",
+        message: "Let me know about your team. \n Please enter the Manager's Name.",
         default: "Bill Nye"
     },
     {
-        type: "input",
+        type: "number",
         name: "managerId",
         message: "Please enter the Manager's ID.",
-        default: "2"
+        default: 2
     },
     {
         type: "input",
@@ -93,20 +93,41 @@ const managerPrompt  = [
         default: "Billnye@gmail.com"
     },
     {
-        type: "input",
+        type: "number",
         name: "officeNumber",
         message: "Please enter the Manager's Office Number.",
-        default: "40"
+        default: 40
     }
 ];
-function init() {
+function teamPrompts() {
     inquirer.prompt(rolePrompt).then(answers => {
-    if (condition) {
-        
-    }
-    })
+        if (answers.employee === "Engineer") {
+            inquirer.prompt(engineerPrompt).then(answers => {
+                var newEmployee = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
+                engineeringTeam.push(newEmployee);
+                teamPrompts();
+            });
+        } else if (answers.employee === "Intern") {
+            inquirer.prompt(internPrompt).then(answers => {
+                var newEmployee = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+                engineeringTeam.push(newEmployee);
+                teamPrompts();
+            });
+        }else {
+            console.log(engineeringTeam);
+        }
+    });
+}
+function init() {
+    inquirer.prompt(managerPrompt).then(answers => {
+        var newEmployee = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.officeNumber);
+        engineeringTeam.push(newEmployee);
+        teamPrompts();
+    });
+
 }
 init();
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
