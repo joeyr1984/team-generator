@@ -9,15 +9,21 @@ const render = employees => {
   html.push(employees
     .filter(employee => employee.getRole() === "Manager")
     .map(manager => renderManager(manager))
+    .join("")
   );
+  //console.log(html);
   html.push(employees
     .filter(employee => employee.getRole() === "Engineer")
     .map(engineer => renderEngineer(engineer))
+    .join("")
   );
+  //console.log(html);
   html.push(employees
     .filter(employee => employee.getRole() === "Intern")
     .map(intern => renderIntern(intern))
+    .join("")
   );
+//console.log(html);
 
   return renderMain(html.join(""));
 
